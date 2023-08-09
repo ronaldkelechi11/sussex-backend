@@ -9,12 +9,13 @@ const port = 3000
 const mongodbUrl = "mongodb://127.0.0.1:27017/sussexlogistics"
 const ACCESS_POINT = "*"
 
-
 // Middleware
 app.use(express.json())
 app.use(cors({
     origin: ACCESS_POINT
 }))
+
+
 
 // Admin login
 app.post('/admin', (req, res) => {
@@ -53,8 +54,9 @@ app.get("/track/:id", (req, res) => {
 
     Package.findOne({ id })
         .then((result) => {
+            console.log(result);
             if (result == null) {
-                res.status(450).send()
+                res.status(400).send()
             }
             else {
                 res.status(200).send(result)
