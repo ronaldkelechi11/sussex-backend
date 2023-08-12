@@ -40,7 +40,15 @@ app.post('/admin', (req, res) => {
 /* Get all the info then return the user id for the person
  */
 app.post("/admin/add", (req, res) => {
-
+    const myPackage = new Package(req.body.myObject)
+    myPackage.save()
+        .then((result) => {
+            console.log("New Package Saved");
+            res.status(200).send()
+        }).catch((err) => {
+            res.status(500).send()
+            console.log(err);
+        });
 })
 
 // Edit a new Item
@@ -54,7 +62,6 @@ app.get("/track/:id", (req, res) => {
 
     Package.findOne({ id })
         .then((result) => {
-            console.log(result);
             if (result == null) {
                 res.status(400).send()
             }
@@ -65,6 +72,8 @@ app.get("/track/:id", (req, res) => {
             console.log(err);
         });
 })
+
+
 
 app.listen(port,
     () => {
