@@ -6,7 +6,7 @@ const app = express()
 const port = 3000
 
 // Change these before deployment
-const mongodbUrl = "mongodb://127.0.0.1:27017/sussexlogistics"
+const mongodbUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority"
 const ACCESS_POINT = "*"
 
 // Middleware
