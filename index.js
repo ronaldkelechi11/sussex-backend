@@ -51,9 +51,36 @@ app.post("/admin/add", (req, res) => {
         });
 })
 
-// Edit a new Item
-app.put("/admin/edit", (req, res) => {
+// fetch the Item to be updated
+app.post("/admin/edit", (req, res) => {
+    var trackingCode = req.body.trackingCode
+    Package.findOne({ id: trackingCode })
+        .then((result) => {
+            if (result != null) {
+                res.status(200).send(result)
+            }
+            else {
+                res.status(404)
+            }
+        }).catch((err) => {
+            res.send(500)
+            console.log(err);
+        });
+})
 
+
+//Updating the package item
+app.put("/admin/edit", (req, res) => {
+    var id = req.body.id
+    var myObject = req.body.myObject
+
+    Package.findOneAndUpdate({ id: id }, { shipingTracking: myObject.shipingTracking })
+        .then((result) => {
+            res.status(200).send()
+        }).catch((err) => {
+            console.log(err);
+            res.status(500).send()
+        });
 })
 
 // Fetch a particular user from the whole db
