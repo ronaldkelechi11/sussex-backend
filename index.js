@@ -14,7 +14,6 @@ const BUILD_ACCESS_POINT = "https://sussex-logistics.vercel.app"
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(cors({
-    origin: BUILD_ACCESS_POINT,
     credentials: true,
     optionsSuccessStatus: 200
 }))
