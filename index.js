@@ -12,7 +12,9 @@ const ACCESS_POINT = "*"
 // Middleware
 app.use(express.json())
 app.use(cors({
-    origin: ACCESS_POINT
+    origin: ACCESS_POINT,
+    credentials: true,
+    optionsSuccessStatus: 200
 }))
 
 
@@ -20,6 +22,7 @@ app.use(cors({
 app.post('/admin', (req, res) => {
     var email = req.body.email
     var password = req.body.password
+    console.log("Admin is being accessed");
 
     // Wrong Email (400) and wrong password(400)
     if (email != "admin@sussexlogistics.net") {
