@@ -7,7 +7,7 @@ const port = 3000
 
 // Change these before deployment
 const mongodbUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority"
-const ACCESS_POINT = "*"
+const ACCESS_POINT = "https://sussex-logistics.vercel.app/"
 
 // Middleware
 app.use(express.json())
