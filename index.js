@@ -12,9 +12,8 @@ const ACCESS_POINT = "*"
 // Middleware
 app.use(express.json())
 app.use(cors({
-    origin: 'https://sussex-logistics.vercel.app/admin'
+    origin: ACCESS_POINT
 }))
-
 
 
 // Admin login
