@@ -6,13 +6,15 @@ const app = express()
 const port = 3000
 
 // Change these before deployment
-const mongodbUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority"
-const ACCESS_POINT = "*"
+const mongodbUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority/"
+const TEST_ACCESS_POINT = "http://localhost:5173"
+const BUILD_ACCESS_POINT = "https://sussex-logistics.vercel.app"
 
 // Middleware
 app.use(express.json())
+app.use(express.urlencoded())
 app.use(cors({
-    origin: ACCESS_POINT,
+    origin: BUILD_ACCESS_POINT,
     credentials: true,
     optionsSuccessStatus: 200
 }))
@@ -22,7 +24,6 @@ app.use(cors({
 app.post('/admin', (req, res) => {
     var email = req.body.email
     var password = req.body.password
-    console.log("Admin is being accessed");
 
     // Wrong Email (400) and wrong password(400)
     if (email != "admin@sussexlogistics.net") {
