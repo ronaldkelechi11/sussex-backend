@@ -11,7 +11,9 @@ const ACCESS_POINT = "*"
 
 // Middleware
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: 'https://sussex-logistics.vercel.app/'
+}))
 
 
 
