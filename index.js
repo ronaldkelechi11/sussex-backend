@@ -7,14 +7,14 @@ const port = 3000
 
 // Change these before deployment
 const mongodbUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority/"
-const TEST_ACCESS_POINT = "http://localhost:5173"
 const BUILD_ACCESS_POINT = "https://sussex-logistics.vercel.app"
+
 
 // Middleware
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(cors({
-    origin: "*",
+    origin: "https://sussex-logistics.vercel.app",
     credentials: true,
     optionsSuccessStatus: 200
 }))
