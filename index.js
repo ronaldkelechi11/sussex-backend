@@ -14,6 +14,7 @@ const BUILD_ACCESS_POINT = "https://sussex-logistics.vercel.app"
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(cors({
+    origin: "*",
     credentials: true,
     optionsSuccessStatus: 200
 }))
@@ -88,6 +89,7 @@ app.put("/admin/edit", (req, res) => {
 // Fetch a particular user from the whole db
 app.get("/track/:id", (req, res) => {
     var id = req.params.id
+    console.log(`Finding Package: ${id}`);
 
     Package.findOne({ id })
         .then((result) => {
