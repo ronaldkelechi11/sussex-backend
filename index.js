@@ -18,6 +18,10 @@ app.use(cors({
     optionsSuccessStatus: 200
 }))
 
+//admin get
+app.get("/admin", (req,res)=>{
+    res.send("Connected to Admin")
+})
 
 // Admin login
 app.post('/admin', (req, res) => {
