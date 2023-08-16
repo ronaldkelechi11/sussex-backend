@@ -112,11 +112,11 @@ app.get("/track/:id", (req, res) => {
 
 app.listen(port,
     () => {
-        console.log(`App listening on port: ${port}`),
-            mongoose.connect(mongodbUrl).then((result) => {
-                console.log("Connected to MongoDB succesfully");
-            }).catch((err) => {
-                console.log("Couldn't connect to MongoDB");
-            });
+        console.log(`App listening on port: ${port}`)
+        // mongoose.connect(mongodbUrl).then((result) => {
+        //     console.log("Connected to MongoDB succesfully");
+        // }).catch((err) => {
+        //     console.log("Couldn't connect to MongoDB");
+        // });
     }
 )
