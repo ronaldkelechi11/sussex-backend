@@ -59,7 +59,7 @@ app.post("/admin/add", (req, res) => {
 
 
 // fetch the Item to be updated
-app.post("/admin/edit", (req, res) => {
+app.post("/admin/edit", async (req, res) => {
     var trackingCode = req.body.trackingCode
     Package.findOne({ id: trackingCode })
         .then((result) => {
@@ -77,7 +77,7 @@ app.post("/admin/edit", (req, res) => {
 
 
 //Updating the package item
-app.put("/admin/edit", (req, res) => {
+app.put("/admin/edit", async (req, res) => {
     var id = req.body.id
     var myObject = req.body.myObject
 
@@ -91,7 +91,7 @@ app.put("/admin/edit", (req, res) => {
 })
 
 // Fetch a particular user from the whole db
-app.get("/track/:id", (req, res) => {
+app.get("/track/:id", async (req, res) => {
     var id = req.params.id
     console.log(`Finding Package: ${id}`);
 
@@ -113,10 +113,10 @@ app.get("/track/:id", (req, res) => {
 app.listen(port,
     () => {
         console.log(`App listening on port: ${port}`)
-        // mongoose.connect(mongodbUrl).then((result) => {
-        //     console.log("Connected to MongoDB succesfully");
-        // }).catch((err) => {
-        //     console.log("Couldn't connect to MongoDB");
-        // });
+        mongoose.connect(mongodbUrl).then((result) => {
+            console.log("Connected to MongoDB succesfully");
+        }).catch((err) => {
+            console.log("Couldn't connect to MongoDB");
+        });
     }
 )
