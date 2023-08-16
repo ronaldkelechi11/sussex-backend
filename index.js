@@ -4,7 +4,7 @@ const cors = require('cors');
 const Package = require('./models/package');
 const bodyParser = require('body-parser');
 const app = express()
-const port = 3000 || process.env.PORT
+const port = process.env.PORT || 3000
 
 // Change these before deployment
 const mongodbUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority/"
@@ -14,11 +14,7 @@ const BUILD_ACCESS_POINT = "https://sussex-logistics.vercel.app"
 // Middleware
 app.use(express.json())
 app.use(express.urlencoded())
-app.use(cors({
-    origin: "*",
-    credentials: true,
-    optionsSuccessStatus: 200
-}))
+app.use(cors())
 
 //admin get
 app.get("/", (req, res) => {
