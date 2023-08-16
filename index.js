@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const Package = require('./models/package');
 const app = express()
-const port = 3000
+const port = 3000 || process.env.PORT
 
 // Change these before deployment
 const mongodbUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority/"
@@ -14,7 +14,7 @@ const BUILD_ACCESS_POINT = "https://sussex-logistics.vercel.app"
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(cors({
-    origin: "https://sussex-logistics.vercel.app",
+    origin: BUILD_ACCESS_POINT,
     credentials: true,
     optionsSuccessStatus: 200
 }))
@@ -39,6 +39,7 @@ app.post('/admin', (req, res) => {
     }
 })
 
+
 //Add a new package Item
 /* Get all the info then return the user id for the person
  */
@@ -53,6 +54,7 @@ app.post("/admin/add", (req, res) => {
             console.log(err);
         });
 })
+
 
 // fetch the Item to be updated
 app.post("/admin/edit", (req, res) => {
@@ -112,7 +114,7 @@ app.listen(port,
             mongoose.connect(mongodbUrl).then((result) => {
                 console.log("Connected to MongoDB succesfully");
             }).catch((err) => {
-                console.log(err);
+                console.log("Couldn't connect to MongoDB");
             });
     }
 )
