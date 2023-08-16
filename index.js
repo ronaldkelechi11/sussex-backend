@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose');
 const cors = require('cors');
 const Package = require('./models/package');
+const bodyParser = require('body-parser');
 const app = express()
 const port = 3000 || process.env.PORT
 
@@ -14,15 +15,16 @@ const BUILD_ACCESS_POINT = "https://sussex-logistics.vercel.app"
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(cors({
-    origin: BUILD_ACCESS_POINT,
+    origin: "*",
     credentials: true,
     optionsSuccessStatus: 200
 }))
 
 //admin get
-app.get("/admin", (req, res) => {
-    res.send("Connected to Admin")
+app.get("/", (req, res) => {
+    res.send("Connected to APi successfully")
 })
+
 
 // Admin login
 app.post('/admin', (req, res) => {
