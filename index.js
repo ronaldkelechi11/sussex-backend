@@ -22,7 +22,7 @@ app.use(cors({
 
 //admin get
 app.get("/", (req, res) => {
-    res.send("Connected to APi successfully")
+    res.send("Connected to APIS successfully")
 })
 
 
