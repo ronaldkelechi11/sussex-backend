@@ -7,7 +7,7 @@ const app = express()
 const port = process.env.PORT || 3000
 
 // Change these before deployment
-const mongodbUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority/"
+const mongodbUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority"
 const BUILD_ACCESS_POINT = "https://sussex-logistics.vercel.app"
 
 
