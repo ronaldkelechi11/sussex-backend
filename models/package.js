@@ -14,9 +14,7 @@ const packageSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    receiverEmailAddress: {
-        type: String,
-    },
+    receiverEmailAddress: String,
     originCountry: {
         type: String,
         required: true,
