@@ -1,20 +1,27 @@
 const mongoose = require('mongoose');
 
 const packageSchema = new mongoose.Schema({
-    id: String,
-    owner: {
+    id: {
+        type: String,
+        required: true,
+        immutable: true
+    },
+    receiverName: {
         type: String,
         required: true,
     },
-    from: {
+    receiverAddress: {
         type: String,
         required: true,
     },
-    to: {
+    receiverEmailAddress: {
+        type: String,
+    },
+    originCountry: {
         type: String,
         required: true,
     },
-    address: {
+    destinationCountry: {
         type: String,
         required: true,
     },
@@ -22,24 +29,26 @@ const packageSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    typeOfShipment: String,
     expectedDeliveryDate: {
         type: String,
         required: true,
     },
+    paymentMode: String,
     shipingContent: [
         {
             content: String,
-            quantity: Number
+            quantity: String,
+            weight: String,
         }
     ],
     shipingTracking: [
         {
-            dt: String,
+            datetime: String,
             activity: String,
             location: String
         }
     ]
-
 });
 
 module.exports = mongoose.model("Package", packageSchema)
