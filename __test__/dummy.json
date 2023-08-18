@@ -41,7 +41,7 @@
         "receiverEmailAddress": "",
         "originCountry": "",
         "destinationCountry": "",
-        "shipmentDate": "",
+        "shipingDate": "",
         "typeOfShipment": "",
         "expectedDeliveryDate": "",
         "paymentMode": "",

@@ -7,7 +7,8 @@ const app = express()
 const port = process.env.PORT || 3000
 
 // Change these before deployment
-const mongodbUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority"
+const mongodbLiveUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority"
+const mongodbTestUrl = "mongodb://127.0.0.1:27017/sussexlogistics"
 const BUILD_ACCESS_POINT = "https://sussex-logistics.vercel.app"
 
 
@@ -113,7 +114,7 @@ app.get("/track/:id", async (req, res) => {
 app.listen(port,
     () => {
         console.log(`App listening on port: ${port}`)
-        mongoose.connect(mongodbUrl).then((result) => {
+        mongoose.connect(mongodbTestUrl).then((result) => {
             console.log("Connected to MongoDB succesfully");
         }).catch((err) => {
             console.log("Couldn't connect to MongoDB");

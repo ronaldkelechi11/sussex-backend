@@ -23,16 +23,16 @@ const packageSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    shipmentDate: {
+    shipingDate: {
         type: String,
         required: true,
     },
-    typeOfShipment: String,
     expectedDeliveryDate: {
         type: String,
         required: true,
     },
     paymentMode: String,
+    typeOfShipment: String,
     shipingContent: [
         {
             content: String,
@@ -48,5 +48,6 @@ const packageSchema = new mongoose.Schema({
         }
     ]
 });
+
 
 module.exports = mongoose.model("Package", packageSchema)
