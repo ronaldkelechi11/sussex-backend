@@ -2,14 +2,12 @@ const express = require('express')
 const mongoose = require('mongoose');
 const cors = require('cors');
 const Package = require('./models/package');
-const bodyParser = require('body-parser');
 const app = express()
 const port = process.env.PORT || 3000
 
 // Change these before deployment
 const mongodbLiveUrl = "mongodb+srv://ronaldkelechi11:yDYQuArX0twiC7Mr@firstcluster.ywmpwva.mongodb.net/?retryWrites=true&w=majority"
 const mongodbTestUrl = "mongodb://127.0.0.1:27017/sussexlogistics"
-const BUILD_ACCESS_POINT = "https://sussex-logistics.vercel.app"
 
 
 // Middleware
@@ -17,7 +15,7 @@ app.use(express.json())
 app.use(express.urlencoded())
 app.use(cors())
 
-//admin get
+//get
 app.get("/", (req, res) => {
     res.send("Connected to APIS successfully")
 })
@@ -114,7 +112,7 @@ app.get("/track/:id", async (req, res) => {
 app.listen(port,
     () => {
         console.log(`App listening on port: ${port}`)
-        mongoose.connect(mongodbTestUrl).then((result) => {
+        mongoose.connect(mongodbLiveUrl).then((result) => {
             console.log("Connected to MongoDB succesfully");
         }).catch((err) => {
             console.log("Couldn't connect to MongoDB");
