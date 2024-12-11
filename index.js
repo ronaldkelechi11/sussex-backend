@@ -13,11 +13,11 @@ app.use(cors())
 // Change these before deployment
 const mongodbLiveUrl = process.env.MONGO_URL
 const auth = require('./src/routes/auth')
-const invoice = require('./src/routes/invoice')
+const package = require('./src/routes/package')
 
 // Endpoint declaraction
 app.use('/auth', auth)
-app.use('/invoice', invoice)
+app.use('/package', package)
 
 app.listen(port,
     () => {
