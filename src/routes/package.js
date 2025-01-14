@@ -50,10 +50,11 @@ router.post('/', async (req, res) => {
             });
 
             sendEmail(
-                newPackage.receiverEmail,
+                newPackage.receiverEmailAddress,
                 'Your package is on the way!',
                 '',
-                emailHtml);
+                emailHtml
+            );
         } catch (emailError) {
             console.error('Failed to send shipping notification:', emailError);
         }
