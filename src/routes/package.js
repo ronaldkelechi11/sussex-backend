@@ -7,94 +7,123 @@ async function checkIfExists(trackingId) {
     return !!packageExists;
 }
 
+// Utility function to generate tracking ID
+const generateTrackingId = () => {
+    const alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const randomPart = Array.from(
+        { length: 10 },
+        () => alphanumeric[Math.floor(Math.random() * alphanumeric.length)]
+    ).join('');
+    return `${randomPart}-CARGO`;
+};
+
 // Create package
 router.post('/', async (req, res) => {
-    const package = req.body
+    try {
+        // Generate and assign tracking ID
+        let trackingId = generateTrackingId();
+        while (await checkIfExists(trackingId)) {
+            trackingId = generateTrackingId(); // Regenerate if exists
+        }
+        
+        const packageData = {
+            ...req.body,
+            trackingId
+        };
 
-    // To check if package already exists
-    if (checkIfExists(package.trackingId)) {
-        res.status(409).send('Conflict in Database: Package with that Tracking ID already Exists')
+        const newPackage = await _package.create(packageData);
+        res.status(201).json(newPackage);
+    } catch (error) {
+        res.status(400).json({
+            error: error.message || 'Invalid package data'
+        });
     }
-    else {
-        _package.create(package)
-            .then((result) => {
-                res.status(200).send(result)
-            }).catch((err) => {
-                res.status(500).send(err);
-            });
-    }
-})
+});
 
-// Read All package
+// Read All packages with pagination
 router.get('/', async (req, res) => {
-    const package = await _package.find();
-    res.send(package);
-})
+    try {
+        const packages = await _package
+            .find()
+            .exec();
+
+
+
+        res.status(200).json(packages);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching packages' });
+    }
+});
 
 // Read particular package
 router.get('/:trackingId', async (req, res) => {
-    const trackingId = req.params.trackingId
-    const package = await _package.find({ id: trackingId });
-
-    if (!package) {
-        res.status(404).send()
+    try {
+        const package = await _package.findOne({ trackingId: req.params.trackingId });
+        if (!package) {
+            return res.status(404).json({ error: 'Package not found' });
+        }
+        res.status(200).json(package);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching package' });
     }
-    else {
-        res.status(200).send(package);
-    }
-})
+});
 
 // Update package
-router.put('/', async (req, res) => {
-    const updates = req.body;
-
+router.put('/:trackingId', async (req, res) => {
     try {
-        const updatedDocument = await _package.findOneAndUpdate(
-            { id: updates.id },
+        const { trackingId } = req.params;
+        const updates = req.body;
+
+        // Prevent trackingId modification
+        delete updates.trackingId;
+
+        const updatedPackage = await _package.findOneAndUpdate(
+            { trackingId },
             { $set: updates },
             { new: true, runValidators: true }
         );
 
-        if (!updatedDocument) {
-            return res.status(404).json({ error: 'Document not found' });
+        if (!updatedPackage) {
+            return res.status(404).json({ error: 'Package not found' });
+        }
+
+        res.status(200).json(updatedPackage);
+    } catch (error) {
+        res.status(400).json({ error: error.message || 'Invalid update data' });
+    }
+});
+
+// Delete package
+router.delete('/:trackingId', async (req, res) => {
+    try {
+        const package = await _package.findOneAndDelete({
+            trackingId: req.params.trackingId
+        });
+
+        if (!package) {
+            return res.status(404).json({ error: 'Package not found' });
         }
 
         res.status(200).json({
-            message: 'Document updated successfully',
-            data: updatedDocument,
+            message: 'Package deleted successfully',
+            package
         });
     } catch (error) {
-        console.error('Error updating document:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: 'Error deleting package' });
     }
-})
+});
 
-// Delete All packages
-router.delete('/', (req, res) => {
-    _package.deleteMany()
-        .then((result) => {
-            res.status(200).send('Successful')
-        }).catch((err) => {
-            res.status(500)
+// Protect bulk delete with optional authentication middleware
+router.delete('/', async (req, res) => {
+    try {
+        const result = await _package.deleteMany({});
+        res.status(200).json({
+            message: 'All packages deleted successfully',
+            count: result.deletedCount
         });
-})
-
-
-// Delete package
-router.delete('/:id', (req, res) => {
-    const trackingId = req.params.id
-
-    _package.findOneAndDelete({ id: trackingId })
-        .then((result) => {
-            res.status(200).send(
-                {
-                    message: 'Success',
-                    result
-                })
-
-        }).catch((err) => {
-            res.status(500)
-        });
-})
+    } catch (error) {
+        res.status(500).json({ error: 'Error deleting packages' });
+    }
+});
 
 module.exports = router

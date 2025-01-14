@@ -1,31 +1,60 @@
-const express = require('express')
+// Load environment variables first
+try {
+    require('dotenv').config();
+    if (!process.env.MONGO_URL || !process.env.PORT) {
+        throw new Error('Required environment variables are not defined');
+    }
+} catch (error) {
+    console.error('Configuration error:', error.message);
+    process.exit(1);
+}
+
+const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
-const app = express()
-const port = process.env.PORT || 3000
 
-// Middleware
-app.use(express.json())
-app.use(express.urlencoded())
-app.use(cors())
+const app = express();
+const port = process.env.PORT;
 
-// Change these before deployment
-const mongodbLiveUrl = process.env.MONGO_URL
-const auth = require('./src/routes/auth')
-const package = require('./src/routes/package')
+// Enhanced middleware setup
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
 
-// Endpoint declaraction
-app.use('/auth', auth)
-app.use('/package', package)
+// Routes
+const auth = require('./src/routes/auth');
+const package = require('./src/routes/package');
 
-app.listen(port,
-    () => {
-        console.log(`API listening on port: ${port}`)
-        mongoose.connect(mongodbLiveUrl).then((result) => {
-            console.log("Connected to MongoDB succesfully");
-        }).catch((err) => {
-            console.log(err);
+app.use('/auth', auth);
+app.use('/package', package);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
+// MongoDB connection with retry logic
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
         });
+        console.log('Connected to MongoDB successfully');
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        process.exit(1);
     }
-)
+};
+
+// Start server only after DB connection
+connectDB().then(() => {
+    app.listen(port, () => {
+        console.log(`API listening on port: ${port}`);
+    });
+});
