@@ -46,7 +46,8 @@ router.post('/', async (req, res) => {
                 typeOfShipment: newPackage.typeOfShipment,
                 carrier: newPackage.carrier,
                 receiverAddress: newPackage.receiverAddress,
-                receiverEmail: newPackage.receiverEmail
+                receiverEmailAddress: newPackage.receiverEmailAddress,
+                senderName: newPackage.senderName,
             });
 
             sendEmail(

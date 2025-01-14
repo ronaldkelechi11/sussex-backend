@@ -93,7 +93,7 @@
         <div class="content">
             <p>Hello {{receiverName}},</p>
 
-            <p>Great news! Your package has been shipped and is on its way to you.</p>
+            <p>Great news! Your package from {{senderName}} has been shipped and is on its way to you.</p>
 
             <div class="tracking-info">
                 <p>Tracking Number: <span class="tracking-number">{{trackingId}}</span></p>
@@ -123,11 +123,11 @@
         </div>
 
         <div class="footer">
-            <p>This email was sent to {{receiverEmail}}</p>
-            <p>&copy; {{currentYear}} SUSSEX Cargo. All rights reserved.</p>
+            <p>This email was sent to {{receiverEmailAddress}}</p>
+            <p>&copy; {{currentYear}} SUSSEX Logistics. All rights reserved.</p>
             <p>
-                <a href="{{portalUrl}}">Visit Our Website</a> |
-                <a href="{{portalUrl}}/contact">Contact Us</a>
+                <a href="https://sussex-logistics.vercel.app">Visit Our Website</a> |
+                <a href="https://sussex-logistics.vercel.app/contact">Contact Us</a>
             </p>
         </div>
     </div>
