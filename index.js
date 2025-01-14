@@ -1,7 +1,7 @@
 // Load environment variables first
+require('dotenv').config();
 try {
-    require('dotenv').config();
-    if (!process.env.MONGO_URL || !process.env.PORT) {
+    if (!process.env.MONGO_URL || !process.env.PORT || !process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
         throw new Error('Required environment variables are not defined');
     }
 } catch (error) {
@@ -12,7 +12,6 @@ try {
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
 const app = express();
 const port = process.env.PORT;
 

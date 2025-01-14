@@ -1,6 +1,9 @@
 const express = require('express')
 const _package = require('../models/package')
 const router = express.Router()
+const { compileTemplate } = require('../utils/emailService')
+const nodemailer = require('nodemailer')
+const { sendEmail } = require('../services/emailService')
 
 async function checkIfExists(trackingId) {
     const packageExists = await _package.findOne({ trackingId: trackingId })
@@ -25,13 +28,36 @@ router.post('/', async (req, res) => {
         while (await checkIfExists(trackingId)) {
             trackingId = generateTrackingId(); // Regenerate if exists
         }
-        
+
         const packageData = {
             ...req.body,
             trackingId
         };
 
         const newPackage = await _package.create(packageData);
+
+        // Send shipping notification email
+        try {
+            const emailHtml = compileTemplate('shipping-notification', {
+                receiverName: newPackage.receiverName,
+                trackingId: newPackage.trackingId,
+                currentLocation: newPackage.currentLocation || 'Processing Center',
+                expectedDeliveryDate: newPackage.expectedDeliveryDate,
+                typeOfShipment: newPackage.typeOfShipment,
+                carrier: newPackage.carrier,
+                receiverAddress: newPackage.receiverAddress,
+                receiverEmail: newPackage.receiverEmail
+            });
+
+            sendEmail(
+                newPackage.receiverEmail,
+                'Your package is on the way!',
+                '',
+                emailHtml);
+        } catch (emailError) {
+            console.error('Failed to send shipping notification:', emailError);
+        }
+
         res.status(201).json(newPackage);
     } catch (error) {
         res.status(400).json({
@@ -46,8 +72,6 @@ router.get('/', async (req, res) => {
         const packages = await _package
             .find()
             .exec();
-
-
 
         res.status(200).json(packages);
     } catch (error) {

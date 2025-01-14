@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Package is On Its Way</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #e72828;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .tracking-info {
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #e72828;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .button:hover {
+            background: #34495e;
+        }
+
+        .footer {
+            background: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .tracking-number {
+            font-family: monospace;
+            font-size: 18px;
+            color: #e72828;
+            font-weight: bold;
+        }
+
+        .details {
+            margin: 20px 0;
+            border-left: 3px solid #e72828;
+            padding-left: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Your Package is On Its Way!</h1>
+        </div>
+
+        <div class="content">
+            <p>Hello {{receiverName}},</p>
+
+            <p>Great news! Your package has been shipped and is on its way to you.</p>
+
+            <div class="tracking-info">
+                <p>Tracking Number: <span class="tracking-number">{{trackingId}}</span></p>
+                <div class="details">
+                    <p><strong>Current Location:</strong> {{currentLocation}}</p>
+                    <p><strong>Expected Delivery:</strong> {{expectedDeliveryDate}}</p>
+                </div>
+            </div>
+
+            <p>You can track your package's journey in real-time by clicking the button below:</p>
+
+            <center>
+                <a href="{{portalUrl}}/track/{{trackingId}}" class="button">
+                    Track Your Package
+                </a>
+            </center>
+
+            <p>Package Details:</p>
+            <ul>
+                <li>Shipping Method: {{typeOfShipment}}</li>
+                <li>Carrier: {{carrier}}</li>
+                <li>Delivery Address: {{receiverAddress}}</li>
+            </ul>
+
+            <p>If you have any questions about your shipment, please don't hesitate to contact our customer service
+                team.</p>
+        </div>
+
+        <div class="footer">
+            <p>This email was sent to {{receiverEmail}}</p>
+            <p>&copy; {{currentYear}} SUSSEX Cargo. All rights reserved.</p>
+            <p>
+                <a href="{{portalUrl}}">Visit Our Website</a> |
+                <a href="{{portalUrl}}/contact">Contact Us</a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
