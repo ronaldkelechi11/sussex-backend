@@ -1,5 +1,11 @@
 const nodemailer = require('nodemailer');
 
+function validateEmail(email) {
+    if (!email) return false;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
 // Create transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -12,6 +18,10 @@ const transporter = nodemailer.createTransport({
 
 // Send email function
 const sendEmail = async (to, subject, text, html) => {
+    if (!validateEmail(to)) {
+        throw new Error('Invalid recipient email address');
+    }
+
     try {
         const mailOptions = {
             from: `Andre from Sussex Logistics <${process.env.SMTP_USER}>`,
@@ -25,10 +35,11 @@ const sendEmail = async (to, subject, text, html) => {
         return { success: true, messageId: info.messageId };
     } catch (error) {
         console.error('Email sending failed:', error);
-        throw new Error('Failed to send email');
+        throw new Error(`Failed to send email: ${error.message}`);
     }
 };
 
 module.exports = {
-    sendEmail
+    sendEmail,
+    validateEmail
 };

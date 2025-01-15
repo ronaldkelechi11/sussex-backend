@@ -35,29 +35,33 @@ router.post('/', async (req, res) => {
         };
 
         const newPackage = await _package.create(packageData);
+        console.log('New package:', newPackage);
+
 
         // Send shipping notification email
-        try {
-            const emailHtml = compileTemplate('shipping-notification', {
-                receiverName: newPackage.receiverName,
-                trackingId: newPackage.trackingId,
-                currentLocation: newPackage.currentLocation || 'Processing Center',
-                expectedDeliveryDate: newPackage.expectedDeliveryDate,
-                typeOfShipment: newPackage.typeOfShipment,
-                carrier: newPackage.carrier,
-                receiverAddress: newPackage.receiverAddress,
-                receiverEmailAddress: newPackage.receiverEmailAddress,
-                senderName: newPackage.senderName,
-            });
+        if (newPackage.receiverEmailAddress) {
+            try {
+                const emailHtml = compileTemplate('shipping-notification', {
+                    receiverName: newPackage.receiverName,
+                    trackingId: newPackage.trackingId,
+                    currentLocation: newPackage.currentLocation || 'Processing Center',
+                    expectedDeliveryDate: newPackage.expectedDeliveryDate,
+                    typeOfShipment: newPackage.typeOfShipment,
+                    carrier: newPackage.carrier,
+                    receiverAddress: newPackage.receiverAddress,
+                    receiverEmailAddress: newPackage.receiverEmailAddress,
+                    senderName: newPackage.senderName,
+                });
 
-            sendEmail(
-                newPackage.receiverEmailAddress,
-                'Your package is on the way!',
-                '',
-                emailHtml
-            );
-        } catch (emailError) {
-            console.error('Failed to send shipping notification:', emailError);
+                await sendEmail(
+                    newPackage.receiverEmailAddress,
+                    'Your package is on the way!',
+                    '',
+                    emailHtml
+                );
+            } catch (emailError) {
+                console.error('Failed to send shipping notification:', emailError);
+            }
         }
 
         res.status(201).json(newPackage);
@@ -113,6 +117,33 @@ router.put('/:trackingId', async (req, res) => {
             return res.status(404).json({ error: 'Package not found' });
         }
 
+        // Send package update email
+        if (updatedPackage.receiverEmailAddress) {
+            try {
+                const emailHtml = compileTemplate('package-update', {
+                    receiverName: updatedPackage.receiverName,
+                    trackingId: updatedPackage.trackingId,
+                    statusUpdate: updates.status || 'Status Updated',
+                    currentLocation: updatedPackage.currentLocation,
+                    expectedDeliveryDate: updatedPackage.expectedDeliveryDate,
+                    typeOfShipment: updatedPackage.typeOfShipment,
+                    carrier: updatedPackage.carrier,
+                    receiverAddress: updatedPackage.receiverAddress,
+                    receiverEmailAddress: updatedPackage.receiverEmailAddress,
+                    currentYear: new Date().getFullYear()
+                });
+
+                await sendEmail(
+                    updatedPackage.receiverEmailAddress,
+                    `Package Status Update - ${updatedPackage.trackingId}`,
+                    '',
+                    emailHtml
+                );
+            } catch (emailError) {
+                console.error('Failed to send update notification:', emailError);
+            }
+        }
+
         res.status(200).json(updatedPackage);
     } catch (error) {
         res.status(400).json({ error: error.message || 'Invalid update data' });
@@ -140,16 +171,16 @@ router.delete('/:trackingId', async (req, res) => {
 });
 
 // Protect bulk delete with optional authentication middleware
-router.delete('/', async (req, res) => {
-    try {
-        const result = await _package.deleteMany({});
-        res.status(200).json({
-            message: 'All packages deleted successfully',
-            count: result.deletedCount
-        });
-    } catch (error) {
-        res.status(500).json({ error: 'Error deleting packages' });
-    }
-});
+// router.delete('/', async (req, res) => {
+//     try {
+//         const result = await _package.deleteMany({});
+//         res.status(200).json({
+//             message: 'All packages deleted successfully',
+//             count: result.deletedCount
+//         });
+//     } catch (error) {
+//         res.status(500).json({ error: 'Error deleting packages' });
+//     }
+// });
 
 module.exports = router
