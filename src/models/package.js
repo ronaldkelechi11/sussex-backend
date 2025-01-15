@@ -58,7 +58,6 @@ const packageSchema = new mongoose.Schema({
   shipingDate: String,
   expectedDeliveryDate: String,
   typeOfShipment: String,
-  packageValue: String,
   carrier: {
     type: String,
     default: "SUSSEX Express Logistics",
