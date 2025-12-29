@@ -18,6 +18,7 @@
     "mongoose": "^7.4.2",
     "nodemailer": "^6.9.16",
     "nodemon": "^3.0.1",
+    "resend": "^6.6.0",
     "validator": "^13.12.0"
   }
 }
