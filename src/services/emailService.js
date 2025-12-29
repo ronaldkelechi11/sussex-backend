@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+const axios = require('axios');
 
 function validateEmail(email) {
     if (!email) return false;
@@ -6,30 +6,10 @@ function validateEmail(email) {
     return emailRegex.test(email);
 }
 
-// Create transporter as a singleton
-let _transporter = null;
-const getTransporter = () => {
-    if (!_transporter) {
-        _transporter = nodemailer.createTransport({
-            service: 'gmail',
-            host: 'smtp.gmail.com',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASSWORD
-            },
-            pool: true, // Use pooled connections
-            maxConnections: 5,
-            maxMessages: 100
-        });
-    }
-    return _transporter;
-};
-
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const sendEmailWithRetry = async (mailOptions, maxRetries = 3, initialDelay = 1000) => {
     let lastError;
-    const transporter = getTransporter();
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
@@ -38,12 +18,28 @@ const sendEmailWithRetry = async (mailOptions, maxRetries = 3, initialDelay = 10
                 setTimeout(() => reject(new Error('Email sending timeout')), 30000)
             );
 
-            const emailPromise = transporter.sendMail(mailOptions);
-            const info = await Promise.race([emailPromise, timeoutPromise]);
+            const emailPromise = axios.post(
+                process.env.RESEND_API_URL || 'https://api.resend.com/emails',
+                {
+                    from: `Andre from Sussex Logistics <${process.env.SMTP_USER}>`,
+                    to: mailOptions.to,
+                    subject: mailOptions.subject,
+                    text: mailOptions.text,
+                    html: mailOptions.html
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            const response = await Promise.race([emailPromise, timeoutPromise]);
 
             return {
                 success: true,
-                messageId: info.messageId,
+                messageId: response.data.id,
                 attempts: attempt
             };
         } catch (error) {
@@ -66,7 +62,6 @@ const sendEmail = async (to, subject, text, html) => {
     }
 
     const mailOptions = {
-        from: `Andre from Sussex Logistics <${process.env.SMTP_USER}>`,
         to,
         subject,
         text,

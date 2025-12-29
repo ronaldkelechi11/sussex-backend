@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {
 
                 await sendEmail(
                     newPackage.receiverEmailAddress,
-                    'Your package is on the way!',
+                    'Good News. Your package is on the way!',
                     '',
                     emailHtml
                 );

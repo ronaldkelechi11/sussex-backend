@@ -1,4 +1,4 @@
-node_modules
+/node_modules
 __test__
 .env
 /src/templates/template.html
