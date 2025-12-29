@@ -31,7 +31,8 @@ const sendEmailWithRetry = async (mailOptions, maxRetries = 3, initialDelay = 10
                     headers: {
                         Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    timeout: 10000
                 }
             );
 
@@ -44,7 +45,15 @@ const sendEmailWithRetry = async (mailOptions, maxRetries = 3, initialDelay = 10
             };
         } catch (error) {
             lastError = error;
-            console.warn(`Email sending attempt ${attempt} failed:`, error.message);
+            const errorMessage = error.response?.data?.message || error.message;
+            const statusCode = error.response?.status || 'unknown';
+
+            console.warn(`Email sending attempt ${attempt} failed (${statusCode}):`, errorMessage);
+
+            // Don't retry on 401/403 authentication errors
+            if (error.response?.status === 401 || error.response?.status === 403) {
+                throw new Error(`Authentication failed (${statusCode}): ${errorMessage}. Check RESEND_API_KEY and SMTP_USER environment variables.`);
+            }
 
             if (attempt < maxRetries) {
                 const delay = initialDelay * Math.pow(2, attempt - 1); // Exponential backoff
