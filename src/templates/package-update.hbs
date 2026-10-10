@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -7,129 +7,297 @@
     <title>Package Status Update</title>
     <style>
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #1e293b;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f1f5f9;
+        }
+
+        .wrapper {
+            width: 100%;
+            background-color: #f1f5f9;
+            padding: 30px 15px;
+            box-sizing: border-box;
         }
 
         .container {
             max-width: 600px;
-            margin: 20px auto;
+            margin: 0 auto;
             background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             overflow: hidden;
+            border: 1px solid #e2e8f0;
         }
 
         .header {
-            background: #e72828;
-            color: white;
-            padding: 20px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            padding: 30px 20px;
             text-align: center;
+            border-bottom: 4px solid #e72828;
         }
 
-        .header h1 {
-            color: white;
+        .brand-title {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        .brand-subtitle {
+            margin: 5px 0 0 0;
+            font-size: 13px;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
         }
 
         .content {
-            padding: 30px;
+            padding: 32px 28px;
         }
 
-        .tracking-info {
-            background: #f8f9fa;
-            border-radius: 5px;
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .intro-text {
+            font-size: 15px;
+            color: #475569;
+            margin-top: 0;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
             padding: 20px;
-            margin: 20px 0;
+            margin-bottom: 24px;
         }
 
-        .button {
-            display: inline-block;
-            padding: 12px 25px;
-            background: #e72828;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 20px 0;
-            font-weight: bold;
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
         }
 
-        .button:hover {
-            background: #34495e;
-        }
-
-        .footer {
-            background: #f4f4f4;
-            padding: 20px;
-            text-align: center;
+        .tracking-label {
             font-size: 12px;
-            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #64748b;
+            letter-spacing: 0.5px;
         }
 
         .tracking-number {
-            font-family: monospace;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
             font-size: 18px;
+            font-weight: 700;
             color: #e72828;
-            font-weight: bold;
+            margin-top: 4px;
         }
 
-        .details {
-            margin: 20px 0;
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .details-box {
             border-left: 3px solid #e72828;
-            padding-left: 15px;
+            padding-left: 14px;
+            margin-top: 12px;
+        }
+
+        .detail-row {
+            margin-bottom: 12px;
+        }
+
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 2px;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .cta-container {
+            text-align: center;
+            margin: 28px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background-color: #e72828;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            box-shadow: 0 4px 12px rgba(231, 40, 40, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .details-grid {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .details-grid td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+        .details-grid tr:last-child td {
+            border-bottom: none;
+        }
+
+        .grid-label {
+            color: #64748b;
+            font-weight: 500;
+            width: 35%;
+        }
+
+        .grid-value {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            background-color: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 24px 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .footer-links {
+            margin-top: 12px;
+        }
+
+        .footer-links a {
+            color: #e72828;
+            text-decoration: none;
+            margin: 0 8px;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Sussex Logistics</h1>
-        </div>
-
-        <div class="content">
-            <p>Hello {{receiverName}},</p>
-
-            <p>There has been an update to your package status:</p>
-
-            <div class="tracking-info">
-                <p>Tracking Number: <span class="tracking-number">{{trackingId}}</span></p>
-                <div class="details">
-                    <p><strong>Status Update:</strong> {{statusUpdate}}</p>
-                    <p><strong>Current Location:</strong> {{currentLocation}}</p>
-                    <p><strong>Expected Delivery:</strong> {{expectedDeliveryDate}}</p>
-                </div>
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <h1 class="brand-title">Sussex Logistics</h1>
+                <p class="brand-subtitle">Global Freight & Logistics Services</p>
             </div>
 
+            <div class="content">
+                <p class="greeting">Hello {{receiverName}},</p>
+                <p class="intro-text">There has been an update to your shipment status.</p>
 
-            <p>Track your package's complete journey by clicking below:</p>
+                <div class="card">
+                    <div class="tracking-header">
+                        <div>
+                            <div class="tracking-label">Tracking Number</div>
+                            <div class="tracking-number">{{trackingId}}</div>
+                        </div>
+                        <div>
+                            <span class="badge">Updated</span>
+                        </div>
+                    </div>
 
-            <center>
-                <a href="https://sussex-logistics.vercel.app/package/{{trackingId}}" class="button">
-                    Track Your Package
-                </a>
-            </center>
+                    <div class="details-box">
+                        <div class="detail-row">
+                            <div class="detail-label">Status Update</div>
+                            <div class="detail-value" style="color: #e72828;">{{statusUpdate}}</div>
+                        </div>
 
-            <p>Package Details:</p>
-            <ul>
-                <li>Shipping Method: {{typeOfShipment}}</li>
-                <li>Carrier: {{carrier}}</li>
-                <li>Delivery Address: {{receiverAddress}}</li>
-            </ul>
+                        <div class="detail-row">
+                            <div class="detail-label">Current Location</div>
+                            <div class="detail-value">{{currentLocation}}</div>
+                        </div>
 
-            <p>Need assistance? Our customer service team is here to help.</p>
-        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Estimated Delivery Date</div>
+                            <div class="detail-value">{{expectedDeliveryDate}}</div>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="footer">
-            <p>This email was sent to {{receiverEmailAddress}}</p>
-            <p>&copy; {{currentYear}} SUSSEX Logistics. All rights reserved.</p>
-            <p>
-                <a href="https://sussex-logistics.vercel.app">Visit Our Website</a> |
-                <a href="https://sussex-logistics.vercel.app/contact">Contact Us</a>
-            </p>
+                <div class="cta-container">
+                    <a href="https://sussex-logistics.vercel.app/package/{{trackingId}}" class="btn" target="_blank">
+                        View Detailed Progress
+                    </a>
+                </div>
+
+                <div class="section-title">Package Details</div>
+                <table class="details-grid">
+                    <tr>
+                        <td class="grid-label">Shipping Method</td>
+                        <td class="grid-value">{{typeOfShipment}}</td>
+                    </tr>
+                    <tr>
+                        <td class="grid-label">Carrier</td>
+                        <td class="grid-value">{{carrier}}</td>
+                    </tr>
+                    <tr>
+                        <td class="grid-label">Delivery Address</td>
+                        <td class="grid-value">{{receiverAddress}}</td>
+                    </tr>
+                </table>
+
+                <p style="margin-top: 24px; font-size: 14px; color: #64748b;">
+                    If you have any questions or require support regarding your shipment, our customer service team is always here to assist you.
+                </p>
+            </div>
+
+            <div class="footer">
+                <p style="margin: 0 0 8px 0;">This email was sent to <strong>{{receiverEmailAddress}}</strong></p>
+                <p style="margin: 0;">&copy; {{currentYear}} SUSSEX Logistics. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="https://sussex-logistics.vercel.app">Visit Website</a> &bull;
+                    <a href="https://sussex-logistics.vercel.app/contact">Support Center</a>
+                </div>
+            </div>
         </div>
     </div>
 </body>
