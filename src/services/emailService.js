@@ -6,6 +6,34 @@ function validateEmail(email) {
     return emailRegex.test(email);
 }
 
+function getFormattedFromAddress() {
+    const rawFrom = process.env.RESEND_FROM_EMAIL || process.env.FROM_EMAIL || process.env.SMTP_USER || process.env.EMAIL_USER;
+    const defaultSenderName = process.env.SENDER_NAME || 'Andre from Sussex Logistics';
+    const fallbackEmail = 'support@sussexlogistics.xyz';
+
+    if (!rawFrom) {
+        return `${defaultSenderName} <${fallbackEmail}>`;
+    }
+
+    const trimmed = rawFrom.trim();
+
+    // If rawFrom is already in "Name <email@example.com>" format
+    const matchWithName = trimmed.match(/^(.*?)\s*<([^\s@]+@[^\s@]+\.[^\s@]+)>$/);
+    if (matchWithName) {
+        const namePart = matchWithName[1].trim() || defaultSenderName;
+        const emailPart = matchWithName[2].trim();
+        return `${namePart} <${emailPart}>`;
+    }
+
+    // If rawFrom is just an email address
+    if (validateEmail(trimmed)) {
+        return `${defaultSenderName} <${trimmed}>`;
+    }
+
+    // If rawFrom is invalid, fall back
+    return `${defaultSenderName} <${fallbackEmail}>`;
+}
+
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const sendEmailWithRetry = async (mailOptions, maxRetries = 3, initialDelay = 1000) => {
@@ -18,10 +46,12 @@ const sendEmailWithRetry = async (mailOptions, maxRetries = 3, initialDelay = 10
                 setTimeout(() => reject(new Error('Email sending timeout')), 30000)
             );
 
+            const fromAddress = getFormattedFromAddress();
+
             const emailPromise = axios.post(
                 process.env.RESEND_API_URL || 'https://api.resend.com/emails',
                 {
-                    from: `Andre from Sussex Logistics <${process.env.SMTP_USER}>`,
+                    from: fromAddress,
                     to: mailOptions.to,
                     subject: mailOptions.subject,
                     text: mailOptions.text,
@@ -87,5 +117,6 @@ const sendEmail = async (to, subject, text, html) => {
 
 module.exports = {
     sendEmail,
-    validateEmail
+    validateEmail,
+    getFormattedFromAddress
 };
