@@ -1,8 +1,11 @@
 // Load environment variables first
 require('dotenv').config();
 try {
-    if (!process.env.MONGO_URL || !process.env.PORT || !process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-        throw new Error('Required environment variables are not defined');
+    if (!process.env.MONGO_URL || !process.env.PORT) {
+        throw new Error('Required environment variables MONGO_URL and PORT must be defined.');
+    }
+    if (!process.env.RESEND_API_KEY) {
+        console.warn('Warning: RESEND_API_KEY is not set. Email sending via Resend will fail until configured.');
     }
 } catch (error) {
     console.error('Configuration error:', error.message);

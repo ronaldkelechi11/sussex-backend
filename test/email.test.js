@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { compileTemplate } = require('../src/utils/emailService');
-const { validateEmail } = require('../src/services/emailService');
+const { validateEmail, getFormattedFromAddress } = require('../src/services/emailService');
 
 async function runTests() {
     console.log('--- Running Email Service & Template Tests ---');
@@ -10,6 +10,37 @@ async function runTests() {
     assert.strictEqual(validateEmail('invalid-email'), false);
     assert.strictEqual(validateEmail(''), false);
     console.log('✔ validateEmail tests passed');
+
+    // Test 1b: getFormattedFromAddress formatting and fallback
+    const savedEnv = { ...process.env };
+
+    // Scenario A: No env vars set -> fallback
+    delete process.env.RESEND_FROM_EMAIL;
+    delete process.env.FROM_EMAIL;
+    delete process.env.SMTP_USER;
+    delete process.env.EMAIL_USER;
+    delete process.env.SENDER_NAME;
+    assert.strictEqual(getFormattedFromAddress(), 'Andre from Sussex Logistics <support@sussexlogistics.xyz>');
+
+    // Scenario B: Plain email address in RESEND_FROM_EMAIL
+    process.env.RESEND_FROM_EMAIL = 'orders@sussexlogistics.xyz';
+    assert.strictEqual(getFormattedFromAddress(), 'Andre from Sussex Logistics <orders@sussexlogistics.xyz>');
+
+    // Scenario C: Custom SENDER_NAME and plain email
+    process.env.SENDER_NAME = 'Sussex Support';
+    assert.strictEqual(getFormattedFromAddress(), 'Sussex Support <orders@sussexlogistics.xyz>');
+
+    // Scenario D: Pre-formatted address with name and email
+    process.env.RESEND_FROM_EMAIL = 'Custom Logistics <custom@sussexlogistics.xyz>';
+    assert.strictEqual(getFormattedFromAddress(), 'Custom Logistics <custom@sussexlogistics.xyz>');
+
+    // Scenario E: Invalid value in env var falls back to fallback email
+    process.env.RESEND_FROM_EMAIL = 'invalid-email-string';
+    assert.strictEqual(getFormattedFromAddress(), 'Sussex Support <support@sussexlogistics.xyz>');
+
+    // Restore env
+    process.env = savedEnv;
+    console.log('✔ getFormattedFromAddress tests passed');
 
     // Test 2: compileTemplate for shipping-notification
     const shippingHtml = compileTemplate('shipping-notification', {
