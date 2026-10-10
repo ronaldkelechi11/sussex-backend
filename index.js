@@ -27,9 +27,11 @@ app.use(cors({
 // Routes
 const auth = require('./src/routes/auth');
 const package = require('./src/routes/package');
+const email = require('./src/routes/email');
 
 app.use('/auth', auth);
 app.use('/package', package);
+app.use('/emails', email);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
