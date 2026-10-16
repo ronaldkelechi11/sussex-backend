@@ -78,7 +78,25 @@ async function runTests() {
     assert.ok(updateHtml.includes('TRK-998877-CARGO'));
     assert.ok(updateHtml.includes('Package arrived at regional sorting hub'));
     assert.ok(updateHtml.includes('Sorting Hub B'));
-    console.log('✔ package-update template compilation test passed');
+
+    // Test status formatting for boolean true/false and string 'true'/'false'
+    const updateHtmlTrue = compileTemplate('package-update', { statusUpdate: true });
+    assert.ok(updateHtmlTrue.includes('intransit'));
+    assert.ok(!updateHtmlTrue.includes('>true<'));
+
+    const updateHtmlTrueString = compileTemplate('package-update', { statusUpdate: 'true' });
+    assert.ok(updateHtmlTrueString.includes('intransit'));
+    assert.ok(!updateHtmlTrueString.includes('>true<'));
+
+    const updateHtmlFalse = compileTemplate('package-update', { statusUpdate: false });
+    assert.ok(updateHtmlFalse.includes('on hold'));
+    assert.ok(!updateHtmlFalse.includes('>false<'));
+
+    const updateHtmlFalseString = compileTemplate('package-update', { statusUpdate: 'false' });
+    assert.ok(updateHtmlFalseString.includes('on hold'));
+    assert.ok(!updateHtmlFalseString.includes('>false<'));
+
+    console.log('✔ package-update status formatting tests passed');
 
     console.log('All email service & template tests completed successfully!');
 }

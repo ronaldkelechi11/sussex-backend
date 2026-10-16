@@ -120,10 +120,11 @@ router.put('/:trackingId', async (req, res) => {
         // Send package update email
         if (updatedPackage.receiverEmailAddress) {
             try {
+                const rawStatus = updates.status !== undefined ? updates.status : updatedPackage.status;
                 const emailHtml = compileTemplate('package-update', {
                     receiverName: updatedPackage.receiverName,
                     trackingId: updatedPackage.trackingId,
-                    statusUpdate: updates.status || 'Status Updated',
+                    statusUpdate: rawStatus,
                     currentLocation: updatedPackage.currentLocation,
                     expectedDeliveryDate: updatedPackage.expectedDeliveryDate,
                     typeOfShipment: updatedPackage.typeOfShipment,
